@@ -56,6 +56,8 @@ describe("Revoke claim", function () {
             const claim = await VTVLVestingMock.getClaim(account1.address)
             expect(claim.isActive).to.equal(true)
             expect(await VTVLVestingMock.numTokensReservedForVesting()).to.equal(3)
+
+            expect(await VTVLVestingMock.finalVestedAmount(account1.address)).to.equal(3)
         }
 
         // REVOKE
@@ -66,6 +68,8 @@ describe("Revoke claim", function () {
             const claim = await VTVLVestingMock.getClaim(account1.address)
             expect(claim.isActive).to.equal(false)
             expect(await VTVLVestingMock.numTokensReservedForVesting()).to.equal(0)
+
+            expect(await VTVLVestingMock.finalVestedAmount(account1.address)).to.equal(0)
         }
     })
 })
