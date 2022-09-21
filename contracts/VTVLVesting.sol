@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./AccessProtected.sol";
 
+import "hardhat/console.sol";
+
 contract VTVLVesting is Context, AccessProtected {
     using SafeERC20 for IERC20;
 
@@ -253,6 +255,7 @@ contract VTVLVesting is Context, AccessProtected {
                 ) private  hasNoClaim(_recipient) {
 
         require(_recipient != address(0), "INVALID_ADDRESS");
+
         require(_linearVestAmount + _cliffAmount > 0, "INVALID_VESTED_AMOUNT"); // Actually only one of linearvested/cliff amount must be 0, not necessarily both
         require(_startTimestamp > 0, "INVALID_START_TIMESTAMP");
         // Do we need to check whether _startTimestamp is greater than the current block.timestamp? 
@@ -398,6 +401,8 @@ contract VTVLVesting is Context, AccessProtected {
     function withdrawAdmin(uint112 _amountRequested) public onlyAdmin {    
         // Allow the owner to withdraw any balance not currently tied up in contracts.
         uint256 amountRemaining = tokenAddress.balanceOf(address(this)) - numTokensReservedForVesting;
+
+        console.log(amountRemaining);
 
         require(amountRemaining >= _amountRequested, "INSUFFICIENT_BALANCE");
 

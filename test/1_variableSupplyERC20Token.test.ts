@@ -49,6 +49,7 @@ describe("VariableSupplyERC20Token", function () {
         )
 
         expect(await VariableSupplyERC20TokenFactoryMock.totalSupply()).to.be.equal(0);
+        expect(await VariableSupplyERC20TokenFactoryMock.totalSupply()).to.be.equal(0);
         expect(await VariableSupplyERC20TokenFactoryMock.balanceOf(admin.address)).to.be.equal(0);
     })
 });
