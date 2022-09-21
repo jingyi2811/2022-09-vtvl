@@ -373,6 +373,7 @@ contract VTVLVesting is Context, AccessProtected {
         // Conversion of timestamp to uint40 should be safe since 48 bit allows for a lot of years.
         uint112 allowance = vestedAmount(_msgSender(), uint40(block.timestamp));
 
+        // @Jimmy double check the operator, should be >=
         // Make sure we didn't already withdraw more that we're allowed.
         require(allowance > usrClaim.amountWithdrawn, "NOTHING_TO_WITHDRAW");
 
@@ -384,7 +385,7 @@ contract VTVLVesting is Context, AccessProtected {
         usrClaim.amountWithdrawn += amountRemaining;
         // Reduce the allocated amount since the following transaction pays out so the "debt" gets reduced
         numTokensReservedForVesting -= amountRemaining;
-        
+
         // After the "books" are set, transfer the tokens
         // Reentrancy note - internal vars have been changed by now
         // Also following Checks-effects-interactions pattern
@@ -401,7 +402,6 @@ contract VTVLVesting is Context, AccessProtected {
     function withdrawAdmin(uint112 _amountRequested) public onlyAdmin {    
         // Allow the owner to withdraw any balance not currently tied up in contracts.
         uint256 amountRemaining = tokenAddress.balanceOf(address(this)) - numTokensReservedForVesting;
-
         require(amountRemaining >= _amountRequested, "INSUFFICIENT_BALANCE");
 
         // Actually withdraw the tokens
@@ -423,9 +423,9 @@ contract VTVLVesting is Context, AccessProtected {
         Claim storage _claim = claims[_recipient];
         // Calculate what the claim should finally vest to
         uint112 finalVestAmt = finalVestedAmount(_recipient);
-
         // No point in revoking something that has been fully consumed
         // so require that there be unconsumed amount
+
         require( _claim.amountWithdrawn < finalVestAmt, "NO_UNVESTED_AMOUNT");
 
         // The amount that is "reclaimed" is equal to the total allocation less what was already withdrawn

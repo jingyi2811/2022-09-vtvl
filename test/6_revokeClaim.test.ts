@@ -2,7 +2,7 @@ import {expect} from "chai";
 // @ts-ignore
 import {ethers} from "hardhat";
 
-describe("Withdraw", function () {
+describe("Revoke claim", function () {
     let admin: any
     let account1: any
     let TestERC20TokenMock: any
@@ -49,27 +49,23 @@ describe("Withdraw", function () {
         )
     });
 
-    it("Should be able to withdraw", async function () {
-        // Before withdrawal
+    it("Should be able to revoke", async function () {
+
+        // Before revoke
         {
             const claim = await VTVLVestingMock.getClaim(account1.address)
-            expect(await TestERC20TokenMock.balanceOf(VTVLVestingMock.address)).to.be.equal(1_000_000)
-            expect(await VTVLVestingMock.vestedAmount(account1.address, timestamp)).to.be.equal(2)
-            expect(await VTVLVestingMock.numTokensReservedForVesting()).to.be.equal(3)
-            expect(await claim.amountWithdrawn).to.be.equal(0)
+            expect(claim.isActive).to.equal(true)
+            expect(await VTVLVestingMock.numTokensReservedForVesting()).to.equal(3)
         }
 
-        // PERFORM WITHDRAWAL
-        await VTVLVestingMock.connect(account1).withdraw()
+        // REVOKE
+        await VTVLVestingMock.connect(admin).revokeClaim(account1.address)
 
-        // After withdrawal
+        // After revoke
         {
             const claim = await VTVLVestingMock.getClaim(account1.address)
-
-            expect(await TestERC20TokenMock.balanceOf(VTVLVestingMock.address)).to.be.equal(999_997)
-            expect(await VTVLVestingMock.vestedAmount(account1.address, timestamp)).to.be.equal(3)
-            expect(await VTVLVestingMock.numTokensReservedForVesting()).to.be.equal(0)
-            expect(await claim.amountWithdrawn).to.be.equal(3)
+            expect(claim.isActive).to.equal(false)
+            expect(await VTVLVestingMock.numTokensReservedForVesting()).to.equal(0)
         }
     })
 })
