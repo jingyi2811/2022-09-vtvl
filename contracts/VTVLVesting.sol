@@ -258,7 +258,7 @@ contract VTVLVesting is Context, AccessProtected {
 
         require(_linearVestAmount + _cliffAmount > 0, "INVALID_VESTED_AMOUNT"); // Actually only one of linearvested/cliff amount must be 0, not necessarily both
         require(_startTimestamp > 0, "INVALID_START_TIMESTAMP");
-        // Do we need to check whether _startTimestamp is greater than the current block.timestamp? 
+        // Do we need to check whether _startTimestamp is greater than the current block.timestamp?
         // Or do we allow schedules that started in the past? 
         // -> Conclusion: we want to allow this, for founders that might have forgotten to add some users, or to avoid issues with transactions not going through because of discoordination between block.timestamp and sender's local time
         // require(_endTimestamp > 0, "_endTimestamp must be valid"); // not necessary because of the next condition (transitively)
@@ -401,8 +401,6 @@ contract VTVLVesting is Context, AccessProtected {
     function withdrawAdmin(uint112 _amountRequested) public onlyAdmin {    
         // Allow the owner to withdraw any balance not currently tied up in contracts.
         uint256 amountRemaining = tokenAddress.balanceOf(address(this)) - numTokensReservedForVesting;
-
-        console.log(amountRemaining);
 
         require(amountRemaining >= _amountRequested, "INSUFFICIENT_BALANCE");
 
