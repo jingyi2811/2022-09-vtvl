@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract FullPremintERC20Token is ERC20 {
     // uint constant _initialSupply = 100 * (10**18);
     constructor(string memory name_, string memory symbol_, uint256 supply_) ERC20(name_, symbol_) {
+        // @Jimmy > should change to != to save gas
         require(supply_ > 0, "NO_ZERO_MINT");
         _mint(_msgSender(), supply_);
     }

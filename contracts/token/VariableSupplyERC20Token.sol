@@ -3,6 +3,7 @@ pragma solidity ^0.8.14;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../AccessProtected.sol";
+import "hardhat/console.sol";
 
 /**
 @notice A ERC20 token contract that allows minting at will, with limited or unlimited supply.
@@ -24,6 +25,7 @@ contract VariableSupplyERC20Token is ERC20, AccessProtected {
         // Therefore, we have valid scenarios if either of them is 0
         // However, if both are 0 we might have a valid scenario as well - user just wants to create a token but doesn't want to mint anything
         // Should we allow this?
+
         require(initialSupply_ > 0 || maxSupply_ > 0, "INVALID_AMOUNT");
         mintableSupply = maxSupply_;
         
