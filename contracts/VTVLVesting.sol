@@ -342,8 +342,9 @@ contract VTVLVesting is Context, AccessProtected {
         uint112[] memory _linearVestAmounts, 
         uint112[] memory _cliffAmounts) 
         external onlyAdmin {
-        
         uint256 length = _recipients.length;
+        //require(length <= 7, 'Unable to accept larger claim number'); // Apply to ethereum and polygon
+
         require(_startTimestamps.length == length &&
                 _endTimestamps.length == length &&
                 _cliffReleaseTimestamps.length == length &&

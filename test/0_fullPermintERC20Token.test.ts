@@ -1,4 +1,5 @@
 import {expect} from "chai";
+// @ts-ignore
 import {ethers} from "hardhat";
 
 describe("FullPermintERC20Token", function () {

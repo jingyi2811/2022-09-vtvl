@@ -42,9 +42,9 @@ describe("Vested amount", function () {
         await VTVLVestingMock.connect(admin).createClaimsBatch(
             [account1.address],   // recipient
             [timestamp],          // start timestamp
-            [timestamp + 12],      // end timestamp
+            [timestamp + 10],      // end timestamp
             [0],          // cliff Release timestamp
-            [3],                  // Release Interval Secs
+            [1],                  // Release Interval Secs
             [1_000],                  // Linear vest amount
             [0]                   // Cliff amount
         )
@@ -54,24 +54,24 @@ describe("Vested amount", function () {
         const currentTimestamp = await (await ethers.provider.getBlock(await ethers.provider.getBlockNumber())).timestamp;
         expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp)).to.be.equal(100)
 
+        //Wait for 1 more second
+        await helpers.time.increaseTo(currentTimestamp + 1);
+        expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 1)).to.be.equal(200)
+
         // Wait for 1 more second
-        // await helpers.time.increaseTo(currentTimestamp + 1);
-        // expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 1)).to.be.equal(200)
-        //
-        // // Wait for 1 more second
-        // await helpers.time.increaseTo(currentTimestamp + 2);
-        // expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 2)).to.be.equal(300)
-        //
-        // // Wait for 1 more second
-        // await helpers.time.increaseTo(currentTimestamp + 3);
-        // expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 3)).to.be.equal(400)
-        //
-        // // Wait for 1 more second
-        // await helpers.time.increaseTo(currentTimestamp + 4);
-        // expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 4)).to.be.equal(500)
-        //
-        // // Wait for 20 more seconds
-        // await helpers.time.increaseTo(currentTimestamp + 20);
-        // expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 9)).to.be.equal(1_000)
+        await helpers.time.increaseTo(currentTimestamp + 2);
+        expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 2)).to.be.equal(300)
+
+        // Wait for 1 more second
+        await helpers.time.increaseTo(currentTimestamp + 3);
+        expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 3)).to.be.equal(400)
+
+        // Wait for 1 more second
+        await helpers.time.increaseTo(currentTimestamp + 4);
+        expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 4)).to.be.equal(500)
+
+        // Wait for 20 more seconds
+        await helpers.time.increaseTo(currentTimestamp + 20);
+        expect(await VTVLVestingMock.vestedAmount(account1.address, currentTimestamp + 9)).to.be.equal(1_000)
     })
 })

@@ -39,18 +39,5 @@ describe("VariableSupplyERC20Token", function () {
         expect(await VariableSupplyERC20TokenFactoryMock.totalSupply()).to.be.equal(0);
         expect(await VariableSupplyERC20TokenFactoryMock.balanceOf(admin.address)).to.be.equal(0);
     })
-
-    it.only("Should not deploy if max supply = 0", async function () {
-        VariableSupplyERC20TokenFactoryMock = await VariableSupplyERC20TokenFactory.deploy(
-            NAME,
-            SYMBOL,
-            SUPPLY,
-            0
-        )
-
-        expect(await VariableSupplyERC20TokenFactoryMock.totalSupply()).to.be.equal(0);
-        expect(await VariableSupplyERC20TokenFactoryMock.totalSupply()).to.be.equal(0);
-        expect(await VariableSupplyERC20TokenFactoryMock.balanceOf(admin.address)).to.be.equal(0);
-    })
 });
 
